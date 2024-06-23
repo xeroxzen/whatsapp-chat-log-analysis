@@ -31,15 +31,15 @@ def parse_chat_log(txt_file_path, csv_file_path):
         match = pattern.match(line)
         if match:
             if current_message:
-                # Append the previous message to the data list
+                # Appending the previous message to the data list
                 data.append([current_date, current_time, current_sender, current_message])
             current_date, current_time, current_sender, current_message = match.groups()
         else:
-            # Append the line to the current message
+            # Appending the line to the current message
             current_message += "\n" + line.strip()
 
     if current_message:
-        # Append the last message to the data list
+        # Appending the last message to the data list
         data.append([current_date, current_time, current_sender, current_message])
 
     # Creating a DataFrame
