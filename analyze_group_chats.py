@@ -28,7 +28,7 @@ def analyze_chat_log(csv_file_path):
     df.dropna(subset=['Date', 'Time'], inplace=True)
     
     # 1. Top 10 participants
-    top_participants = df['Sender'].value_counts().head(15)
+    top_participants = df['Sender'].value_counts().head(10)
     print("Top 10 Participants:")
     print(top_participants)
     
