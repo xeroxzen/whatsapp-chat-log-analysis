@@ -50,6 +50,6 @@ def parse_chat_log(txt_file_path, csv_file_path):
 
 # How to run the script
 txt_file_path = sys.argv[1]
-csv_file_path = "./datasets/python_byo_chat_log.csv"
+csv_file_path = "./datasets/austrian_economics_chat.csv"
 
 parse_chat_log(txt_file_path, csv_file_path)
