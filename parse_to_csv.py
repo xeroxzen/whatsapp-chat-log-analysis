@@ -10,38 +10,46 @@
 - Time is in the format hh:mm:ss
 """
 
-import csv
+import pandas as pd
 import re
 import sys
 
 def parse_chat_log(txt_file_path, csv_file_path):
-    pattern = re.compile(r"\[(\d{2}/\d{2}/\d{4}), (\d{2}:\d{2}:\d{2})\] (.+?): (.+)")
-    
+    pattern = re.compile(r"\[(\d{1,2}/\d{1,2}/\d{4}), (\d{2}:\d{2}:\d{2})\] (.+?): (.+)")
+    data = []
+
     # Reading the contents of the .txt file
-    with open(txt_file_path, 'r', encoding='utf-8') as txt_file:
+    with open(txt_file_path, "r", encoding="utf-8") as txt_file:
         lines = txt_file.readlines()
 
-    # Writing to the CSV file
-    with open(csv_file_path, 'w', newline='', encoding='utf-8') as csv_file:
-        csv_writer = csv.writer(csv_file)
-        
-        # The column names for the CSV file
-        csv_writer.writerow(['Date', 'Time', 'Sender', 'Message'])
+    current_message = ""
+    current_date = ""
+    current_time = ""
+    current_sender = ""
 
-        # Process the .txt file line by line
-        for line in lines:
-            match = pattern.match(line)
-            if match:
-                date, time, sender, message = match.groups()
-                # Write the parsed data to the CSV file
-                csv_writer.writerow([date, time, sender, message])
+    for line in lines:
+        match = pattern.match(line)
+        if match:
+            if current_message:
+                # Append the previous message to the data list
+                data.append([current_date, current_time, current_sender, current_message])
+            current_date, current_time, current_sender, current_message = match.groups()
+        else:
+            # Append the line to the current message
+            current_message += "\n" + line.strip()
+
+    if current_message:
+        # Append the last message to the data list
+        data.append([current_date, current_time, current_sender, current_message])
+
+    # Creating a DataFrame
+    df = pd.DataFrame(data, columns=["Date", "Time", "Sender", "Message"])
+
+    # Writing to the CSV file
+    df.to_csv(csv_file_path, index=False, encoding="utf-8")
 
 # How to run the script
 txt_file_path = sys.argv[1]
-csv_file_path = 'whatsapp_chat_with_prie.csv'
+csv_file_path = "./datasets/python_byo_chat_log.csv"
 
 parse_chat_log(txt_file_path, csv_file_path)
-
-
-
-    
