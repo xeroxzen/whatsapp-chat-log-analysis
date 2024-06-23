@@ -27,6 +27,10 @@ def analyze_chat_log(csv_file_path):
     # Dropping rows with NaT in 'Date' or NaT in 'Time'
     df.dropna(subset=['Date', 'Time'], inplace=True)
     
+    # Converting 'Message' column to string and removing NaN values
+    df['Message'] = df['Message'].astype(str)
+    df.dropna(subset=['Message'], inplace=True)
+    
     # 1. Comparison of messages sent between two participants
     participant1 = 'Prie♥️'  
     participant2 = 'Google Jr' 
@@ -107,5 +111,5 @@ def analyze_chat_log(csv_file_path):
     plt.show()
 
 # How to use the function
-csv_file_path = 'whatsapp_chat_with_prie.csv'  # Place the path to your CSV file here
+csv_file_path = './datasets/whatsapp_chats_with_prie.csv'  # Place the path to your CSV file here
 analyze_chat_log(csv_file_path)
